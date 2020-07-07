@@ -1,14 +1,38 @@
+import 'package:counterbet/model/betData.dart';
 import 'package:counterbet/widgets/fabNewBet.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class TapCounter extends StatefulWidget {
+  TapCounter(
+      {Key key,
+      this.betTitle,
+      this.betDate,
+      this.betOpening,
+      this.betSpinSize,
+      this.betLimit})
+      : super(key: key);
+
+  final betTitle;
+  final betDate;
+  final double betOpening;
+  final double betSpinSize;
+  final double betLimit;
+
   @override
   _TapCounterState createState() => _TapCounterState();
 }
 
 class _TapCounterState extends State<TapCounter> {
   int _userClick = 0;
-  int _totalClick = 10;
+  int _totalClick;
+  double betClosing = 10;
+
+  setTapLimits() {
+    double spinAmount = (widget.betLimit / widget.betSpinSize);
+    _totalClick = spinAmount.round();
+    print(_totalClick);
+  }
 
   void _incrementClick() {
     if (_userClick < _totalClick) {
@@ -17,7 +41,6 @@ class _TapCounterState extends State<TapCounter> {
       });
     } else if (_userClick == _totalClick) {
       completedAlert();
-      print('Wooo it the end');
     }
   }
 
@@ -40,6 +63,7 @@ class _TapCounterState extends State<TapCounter> {
             FlatButton(
               child: Text('Save'),
               onPressed: () {
+                saveBetDetails();
                 Navigator.of(context).pop();
               },
             ),
@@ -49,12 +73,29 @@ class _TapCounterState extends State<TapCounter> {
     );
   }
 
+  void saveToBox(Betting betting) {
+    final bettingBox = Hive.box('bets');
+
+    bettingBox.add(betting);
+  }
+
+  void saveBetDetails() {
+    final newBet = Betting(widget.betTitle, widget.betDate, widget.betOpening,
+        betClosing, 'complete');
+    saveToBox(newBet);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setTapLimits();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('New Bet'),
-      ),
+      appBar: AppBar(),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

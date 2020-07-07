@@ -1,3 +1,5 @@
+import 'package:counterbet/model/betData.dart';
+import 'package:counterbet/screens/tapCounter_screen.dart';
 import 'package:flutter/material.dart';
 
 class AddDetails extends StatefulWidget {
@@ -11,6 +13,29 @@ class _AddDetailsState extends State<AddDetails> {
   TextEditingController _betSpinSize;
   TextEditingController _betLimit;
   TextEditingController _betDate;
+
+  void _trackBet() {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => TapCounter(
+              betTitle: _betTitle.text,
+              betOpening: double.parse(_betOpening.text),
+              betLimit: double.parse(_betLimit.text),
+              betSpinSize: double.parse(_betSpinSize.text),
+              betDate: _betDate.text,
+            )));
+    // print('on load test');
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _betTitle = new TextEditingController();
+    _betDate = new TextEditingController();
+    _betLimit = new TextEditingController();
+    _betOpening = new TextEditingController();
+    _betSpinSize = new TextEditingController();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +59,7 @@ class _AddDetailsState extends State<AddDetails> {
                     betSpinSize: _betSpinSize,
                     betLimit: _betLimit,
                     betDate: _betDate),
-                SubmitButton(),
+                SubmitButton(onTapped: _trackBet),
               ],
             ),
           ),
@@ -139,10 +164,12 @@ class DecoratedTextField extends StatelessWidget {
 }
 
 class SubmitButton extends StatelessWidget {
+  SubmitButton({Key key, this.onTapped}) : super(key: key);
+  final onTapped;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTapped,
       child: Container(
         color: Colors.blue,
         margin: EdgeInsets.only(top: 20.0),

@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
               return ListScreen(title: 'counterBet');
             }
           } else {
-            return Text('test');
+            return Container();
           }
         },
       ),

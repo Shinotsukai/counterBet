@@ -93,16 +93,12 @@ class BetList extends StatelessWidget {
             itemCount: bettingBox.length,
             itemBuilder: (context, index) {
               final betData = bettingBox.get(index) as Betting;
-              if (betData.status == 'complete') {
-                return SizedBox(
-                    width: double.infinity,
-                    child: BetListTile(
-                      betData: betData,
-                    ));
-              } else {
-                return Container();
-              }
-              ;
+
+              return SizedBox(
+                  width: double.infinity,
+                  child: BetListTile(
+                    betData: betData,
+                  ));
             },
           );
         },
@@ -127,7 +123,7 @@ class _BetListTileState extends State<BetListTile> {
       onTap: () {},
       child: Card(
         child: ListTile(
-          leading: Text(widget.betData.status),
+          // leading: Text(widget.betData.status),
           title: Text(widget.betData.title),
           subtitle: Text(widget.betData.date),
           trailing: Text('£' + widget.betData.closingBal.toString()),
