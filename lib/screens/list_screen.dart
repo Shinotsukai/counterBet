@@ -98,6 +98,9 @@ class BetList extends StatelessWidget {
                   width: double.infinity,
                   child: BetListTile(
                     betData: betData,
+                    deleteItem: () {
+                      bettingBox.deleteAt(index);
+                    },
                   ));
             },
           );
@@ -108,9 +111,10 @@ class BetList extends StatelessWidget {
 }
 
 class BetListTile extends StatefulWidget {
-  BetListTile({Key key, this.betData}) : super(key: key);
+  BetListTile({Key key, this.betData, this.deleteItem}) : super(key: key);
 
   final Betting betData;
+  final Function deleteItem;
 
   @override
   _BetListTileState createState() => _BetListTileState();
@@ -120,10 +124,10 @@ class _BetListTileState extends State<BetListTile> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onLongPress: widget.deleteItem,
       child: Card(
         child: ListTile(
-          // leading: Text(widget.betData.status),
+          leading: Text(widget.betData.status),
           title: Text(widget.betData.title),
           subtitle: Text(widget.betData.date),
           trailing: Text('£' + widget.betData.closingBal.toString()),
